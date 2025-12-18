@@ -1,0 +1,23 @@
+/Deep Learning/res_df.joblib
+/Files/commentsfromoceanpeople.csv
+/Files/oceanprofilesfile.csv
+/Files/Top70%oceanprofiles.csv
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/CountVectorizer + MultinominalNB/alle_auswertungen_accuracy_para_version3_iterations_50.joblib
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/CountVectorizer + MultinominalNB/alle_auswertungen_for_f1_score_para_version3_iter_6.joblib
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/CountVectorizer + MultinominalNB/alle_auswertungen_for_f1_score_para_version3_iter_50.joblib
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/CountVectorizer + MultinominalNB/base_countvectorizer.joblib
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/Tf-IDF + MultinominalNB/alle_auswertungen_for_accuracy_para_version3_tf_idf_iter_50.joblib
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/Tf-IDF + MultinominalNB/alle_auswertungen_for_f1_score_para_version3_tf_idf_iter_50.joblib
+/Naive Bayes/Alle Auswertungen Modelle Naive Bayes/Tf-IDF + MultinominalNB/base_tfidf.joblib
+/Trained Models/model.keras
+/Trained Models/model2.keras
+/Trained Models/ocean_model_torchscript.pt
+/Naive Bayes/Alle Modelle Naive Bayes/CountVectorizer + MultinominalNB/alle_modelle_accuracy_para_version3_iterations_50.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/CountVectorizer + MultinominalNB/alle_modelle_for_f1_score_para_version3_iter_6.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/CountVectorizer + MultinominalNB/alle_modelle_for_f1_score_para_version3_iter_50.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/CountVectorizer + MultinominalNB/modelle_countvectorizer_base.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/Tf-IDF + MultinominalNB/alle_modelle_for_accuracy_score_para_version3_tf_idf_iter_50.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/Tf-IDF + MultinominalNB/alle_modelle_for_f1_score_para_version1_iter_18.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/Tf-IDF + MultinominalNB/alle_modelle_for_f1_score_para_version2_iter_18.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/Tf-IDF + MultinominalNB/alle_modelle_for_f1_score_para_version3_tf_idf_iter_50.joblib
+/Naive Bayes/Alle Modelle Naive Bayes/Tf-IDF + MultinominalNB/modelle_tfidf_base.joblib
