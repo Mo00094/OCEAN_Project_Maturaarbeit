@@ -271,6 +271,6 @@ for i, trait in enumerate(traits_without_cat):
 print(history.history.keys())
 
 
-model.save("../Trained Models/model.keras")
+model.save("../Trained Models/model_version1_qwen+mlp.keras")
 
 

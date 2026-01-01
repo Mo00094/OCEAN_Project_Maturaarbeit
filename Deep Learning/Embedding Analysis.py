@@ -62,9 +62,14 @@ X = res_df[["pairwise", "variance"]].values
 kmeans = KMeans(n_clusters=2 , random_state=42)
 labels = kmeans.fit_predict(X)
 
+cut_pair = res_df["pairwise"].quantile(0.045)
+cut_var = res_df["variance"].quantile(0.055)
+
 plt.scatter(res_df["pairwise"], res_df["variance"], c=labels)
 plt.xlabel("Durch. Distanz Paare")
 plt.ylabel("Durch. Varianz")
+plt.axvline(cut_pair, linestyle="--")
+plt.axhline(cut_var, linestyle="--")
 plt.title("KMeans Clustering 2 Cluster")
 plt.show()
 

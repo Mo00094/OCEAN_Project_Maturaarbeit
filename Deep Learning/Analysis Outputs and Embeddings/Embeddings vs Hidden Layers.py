@@ -73,7 +73,7 @@ embeddings = np.vstack(df_users["text"].progress_apply(embed))
 
 pca2 = PCA(n_components=2, random_state=42)
 
-model = load_model("../../Trained Models/model.keras")
+model = load_model("../../Trained Models/model_version1_qwen+mlp.keras")
 
 geteilter_relu = Model(inputs=model.input, outputs=model.get_layer("geteilter_relu").output)
 hidden_geteilt = geteilter_relu.predict(embeddings)

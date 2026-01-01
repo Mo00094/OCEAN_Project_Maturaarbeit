@@ -478,4 +478,4 @@ for i, (col, trait) in enumerate(zip(cols, traits)):
     fig.show()
 
 traced = torch.jit.trace(classifier, dummy_x)
-#torch.jit.save(traced, "ocean_model_torchscript.pt")
+#torch.jit.save(traced, "model_version1_vokab+mlp.pt")
