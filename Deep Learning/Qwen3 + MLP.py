@@ -1,5 +1,3 @@
-#Scikit-Learn (stratified set)
-
 import sklearn as sk
 from sklearn.model_selection import StratifiedShuffleSplit, train_test_split #weil train_test_split nicht in der root von sklearn ist
 import numpy as np
@@ -21,6 +19,10 @@ from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 import numpy as np
 import torch
+
+#---------------------------------
+#Spliting into the Sets
+#---------------------------------
 
 path1 = r"C:\Users\mauri_9qhl4wd\OneDrive - SekII Zürich\Maturarbeit\Top70%oceanprofiles.csv"
 
@@ -98,6 +100,10 @@ for i, splits in enumerate(stratifiezierte_splits):
 
     all_splits.append(split_data)
 
+
+#-----------------------------
+#Qwen3 + MLP
+#-----------------------------
 
 vectorizer_qwen= SentenceTransformer(
     "Qwen/Qwen3-Embedding-0.6B",

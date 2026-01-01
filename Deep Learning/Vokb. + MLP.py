@@ -27,6 +27,10 @@ args = Namespace(
  batch_size=64, device="cuda"
 )
 
+#---------------------------------
+#Spliting into the Sets
+#---------------------------------
+
 path1 = r"C:\Users\mauri_9qhl4wd\OneDrive - SekII Zürich\Maturarbeit\Top70%oceanprofiles.csv"
 
 path2 = r"C:\Users\mauri_9qhl4wd\OneDrive - SekII Zürich\Maturarbeit\PANDORA\commentsfromoceanpeople.csv"
@@ -130,6 +134,10 @@ for i, splits in enumerate(stratifiezierte_splits):
     }
 
     all_splits.append(split_data)
+
+#-----------------------------
+#Vokb. + MLP
+#-----------------------------
 
 ocean_dimensionen  = ["openness_cat", "conscientiousness_cat", "extraversion_cat", "agreeableness_cat", "neuroticism_cat"]
 

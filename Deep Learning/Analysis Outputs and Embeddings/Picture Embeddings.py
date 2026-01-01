@@ -69,7 +69,6 @@ embeddings = np.vstack(df_users["text"].progress_apply(embed))
 pca3 = PCA(n_components=3, random_state=42)
 emb_pca3 = pca3.fit_transform(embeddings)
 
-from mpl_toolkits.mplot3d import Axes3D
 
 colors = ["tab:blue", "tab:orange", "tab:green"]
 
