@@ -83,13 +83,9 @@ for i, splits in enumerate(stratifiezierte_splits):
     x_test = texte_pro_user.set_index("author").loc[test_split.index, "body"]
 
     y_cols = ["openness_cat", "conscientiousness_cat", "extraversion_cat", "agreeableness_cat", "neuroticism_cat"]
-    y_cols_reg = ["openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"]
     y_train = train_split.loc[:, y_cols]
     y_vald = vald_split.loc[:, y_cols]
     y_test = test_split.loc[:, y_cols]
-    y_train_reg = train_split.loc[:, y_cols_reg]
-    y_vald_reg = vald_split.loc[:, y_cols_reg]
-    y_test_reg = test_split.loc[:, y_cols_reg]
 
     split_data = {
         "x_train": x_train,
@@ -98,9 +94,6 @@ for i, splits in enumerate(stratifiezierte_splits):
         "y_train": y_train,
         "y_vald": y_vald,
         "y_test": y_test,
-        "y_train_reg": y_train_reg,
-        "y_vald_reg": y_vald_reg,
-        "y_test_reg": y_test_reg
     }
 
     all_splits.append(split_data)
