@@ -75,7 +75,7 @@ plt.show()
 
 res_df["cluster"] = labels
 
-joblib.dump(res_df, "res_df.joblib")
+joblib.dump(res_df, "author_embedding_konsistenz.joblib")
 cut_pair = res_df["pairwise"].quantile(0.70)
 cut_var = res_df["variance"].quantile(0.70)
 oceandf = pd.read_csv(r"C:\Users\mauri_9qhl4wd\OneDrive - SekII Zürich\Maturarbeit\PANDORA\oceanprofilesfile.csv")

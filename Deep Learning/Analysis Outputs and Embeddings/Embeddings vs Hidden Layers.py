@@ -254,7 +254,7 @@ for (reihe, col), zelle in table.get_celld().items():
     elif repräsentation == "Shared":
         zelle.set_facecolor("#919191")
 
-plt.title('Höchster Cluster Anteil pro Dimension, Repräsentation und Label', pad=20, fontsize=20, fontweight='bold')
+plt.title("Höchster Cluster Anteil pro Dimension, Repräsentation und Label", pad=20, fontsize=20, fontweight="bold")
 plt.subplots_adjust(top=0.95)
 
 plt.savefig(
@@ -293,7 +293,7 @@ for (reihe, col), zelle in table.get_celld().items():
     elif repräsentation == "Shared":
         zelle.set_facecolor("#919191")
 
-plt.title('Aggregierte Form der Clusterinformationen über Dimension und Repräsentation', pad=20, fontweight='bold')
+plt.title("Aggregierte Form der Clusterinformationen über Dimension und Repräsentation", pad=20, fontweight="bold")
 
 plt.tight_layout()
 plt.savefig(
