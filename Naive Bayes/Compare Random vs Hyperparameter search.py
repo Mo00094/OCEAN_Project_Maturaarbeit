@@ -17,7 +17,7 @@ tuned2 = joblib.load(r"Alle Auswertungen Modelle Naive Bayes/Tf-IDF + Multinomin
 
 
 for i, trait in enumerate(traits):
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))  # full in fig, parts in axes
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
     fig.suptitle(trait, fontsize=20, fontweight="bold")
     ConfusionMatrixDisplay.from_predictions(
         base[trait]["y_true"], base[trait]["y_pred_base"],

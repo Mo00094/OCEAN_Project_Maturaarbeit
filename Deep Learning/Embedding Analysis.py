@@ -17,12 +17,7 @@ model = SentenceTransformer("Qwen/Qwen3-Embedding-0.6B", device="cuda")
 model.max_seq_length = 256
 
 def embed_mit_fortschritt(texts, batch_size=BATCH_SIZE):
-    alle_embeddings = []
-    for i in tqdm(range(0, len(texts), batch_size), desc="Encoding batches"):
-        batch = texts[i:i+batch_size]
-        emb = model.encode(batch, convert_to_numpy=True, batch_size=batch_size)
-        alle_embeddings.append(emb)
-    return np.vstack(alle_embeddings)
+    return model.encode(texts, convert_to_numpy=True, batch_size=batch_size, show_progress_bar=True)
 
 def konsistenz(emb):
     variance = np.mean(np.var(emb, axis=0))
@@ -43,7 +38,6 @@ res_df.index.name = "author"
 print(res_df.head())
 print("Totale Nutzer:", len(res_df))
 
-import matplotlib.pyplot as plt
 
 x = res_df["pairwise"]
 y = res_df["variance"]
@@ -55,9 +49,7 @@ plt.title("Varianz zu Distanz")
 plt.show()
 
 
-
-# Datenmatrix für Clustering
-X = res_df[["pairwise", "variance"]].values
+X = res_df[["pairwise", "variance"]]
 
 kmeans = KMeans(n_clusters=2 , random_state=42)
 labels = kmeans.fit_predict(X)
@@ -68,14 +60,14 @@ cut_var = res_df["variance"].quantile(0.055)
 plt.scatter(res_df["pairwise"], res_df["variance"], c=labels)
 plt.xlabel("Durch. Distanz Paare")
 plt.ylabel("Durch. Varianz")
-plt.axvline(cut_pair, linestyle="--")
+plt.axvline(cut_pair, linestyle="--", color="red")
 plt.axhline(cut_var, linestyle="--")
 plt.title("KMeans Clustering 2 Cluster")
 plt.show()
 
 res_df["cluster"] = labels
 
-joblib.dump(res_df, "author_embedding_konsistenz.joblib")
+#joblib.dump(res_df, "author_embedding_konsistenz.joblib")
 cut_pair = res_df["pairwise"].quantile(0.70)
 cut_var = res_df["variance"].quantile(0.70)
 oceandf = pd.read_csv(r"C:\Users\mauri_9qhl4wd\OneDrive - SekII Zürich\Maturarbeit\PANDORA\oceanprofilesfile.csv")

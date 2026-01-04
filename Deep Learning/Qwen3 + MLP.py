@@ -1,6 +1,4 @@
-import sklearn as sk
-from sklearn.model_selection import StratifiedShuffleSplit, train_test_split #weil train_test_split nicht in der root von sklearn ist
-import numpy as np
+from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,12 +11,9 @@ from tensorflow.keras.models import Model
 from pathlib import Path
 from time import strftime
 import matplotlib.pyplot as plt
-import numpy as np
-import os
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 import numpy as np
-import torch
 
 #---------------------------------
 #Spliting into the Sets
@@ -31,7 +26,7 @@ path2 = r"C:\Users\mauri_9qhl4wd\OneDrive - SekII Zürich\Maturarbeit\PANDORA\co
 df = pd.read_csv(path1)
 
 for i, col in enumerate(df.columns[14:19]):
-    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=["niedrig", "mittel", "hoch"]) #Speichert ein Categorical-Object in jeweils einer neuen Spalte für alle OCEAN-Werte, Gibt hier dann 5 Bins, die die Werte für OCEAN unterteilen in die passenden Kateogrien
+    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=["niedrig", "mittel", "hoch"])
 
 cat_cols = [
     "openness_cat",
@@ -47,17 +42,17 @@ df = df.dropna(subset=cat_cols)
 df["Gesamt_strat_OCEAN"] = (df["openness_cat"].astype(str) + "_" + df["conscientiousness_cat"].astype(str) + "_" + df["extraversion_cat"].astype(str) + "_" + df["agreeableness_cat"].astype(str) + "_" + df["neuroticism_cat"].astype(str))
 
 
-counts = df["Gesamt_strat_OCEAN"].value_counts() #Gibt eine Series zürck für alle Werte gezählt in counts
+counts = df["Gesamt_strat_OCEAN"].value_counts()
 
-richtige_kombinationen = counts[counts >= 2].index #Nimmt nur den Index, also z.B. 1-4-3-4-5 aus der Series counts
+richtige_kombinationen = counts[counts >= 2].index
 
 df = df[df["Gesamt_strat_OCEAN"].isin(richtige_kombinationen)]
 
-df = df.reset_index(drop=True) #Index neu berechnen, weil Punkte gelöscht wurden
+df = df.reset_index(drop=True)
 
-splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42) #Spliiter Objekt wird vorbereitet mit jeweils 10 Splits, Test-Grösse von 20% und dem random_state vom 42, damit immer gleiche Test/Trainingssets generiet werden.
-stratifiezierte_splits = [] #Liste für die Paare aus Test- und Trainingsdaten DataFrames
-for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]): #Splitter Objekt hat die Methode split(), um Verteilungen zu berücksichtigen
+splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+stratifiezierte_splits = []
+for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]):
     train_set_n = df.loc[trainings_indexe]
     temp_set = df.loc[test_indexe]
 
@@ -65,8 +60,7 @@ for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]
     temp_set, test_size=0.5, random_state=43
     )
 
-    stratifiezierte_splits.append([train_set_n, val_set, test_set]) #Liste bekommt 10 Paare von Training und Test und Validierung
-
+    stratifiezierte_splits.append([train_set_n, val_set, test_set])
 
 df1 = pd.read_csv(path2)
 
@@ -201,12 +195,6 @@ model.compile(
     loss="sparse_categorical_crossentropy",
     metrics= ["accuracy"] * 5)
 
-tf.keras.utils.plot_model(
-    model,
-    to_file=r"C:\Users\mauri_9qhl4wd\Downloads\model.png",
-    show_shapes=True,
-    show_layer_names=True
-)
 history = model.fit(
     x_train_vec, y_train_list,
     epochs=40,
@@ -231,7 +219,7 @@ for i, trait in enumerate(traits_without_cat):
 
     epochen = range(1, len(loss_training) + 1)
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))  # full in fig, parts in axes
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
 
     fig.suptitle(trait, fontsize=20, fontweight="bold")
 

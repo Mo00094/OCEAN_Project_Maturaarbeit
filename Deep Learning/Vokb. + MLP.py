@@ -1,6 +1,4 @@
-from sklearn.model_selection import StratifiedShuffleSplit, train_test_split #weil train_test_split nicht in der root von sklearn ist
-import numpy as np
-import pandas as pd
+from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 import matplotlib.pyplot as plt
 import torch
 import torch.optim as optim
@@ -16,12 +14,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.metrics import accuracy_score, f1_score, ConfusionMatrixDisplay
 import numpy as np
-import matplotlib.pyplot as plt
-from torchview import draw_graph
 
 args = Namespace(
  hidden_dim=300,
- seed=1337,
  num_epochs=100,
  learning_rate=0.001,
  batch_size=64, device="cuda"
@@ -47,9 +42,8 @@ writer = SummaryWriter(log_dir=str(log_dir))
 
 print("TensorBoard logs in:", log_dir)
 
-
 for i, col in enumerate(df.columns[14:19]):
-    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=[0, 1, 2]) #Speichert ein Categorical-Object in jeweils einer neuen Spalte für alle OCEAN-Werte, Gibt hier dann 5 Bins, die die Werte für OCEAN unterteilen in die passenden Kateogrien
+    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=[0, 1, 2])
 
 cat_cols = [
     "openness_cat",
@@ -69,23 +63,20 @@ traits = [
 
 df = df.dropna(subset=cat_cols)
 
-print(df.columns)
-print(df.head())
-
 df["Gesamt_strat_OCEAN"] = (df["openness_cat"].astype(str) + "_" + df["conscientiousness_cat"].astype(str) + "_" + df["extraversion_cat"].astype(str) + "_" + df["agreeableness_cat"].astype(str) + "_" + df["neuroticism_cat"].astype(str))
 
 
-counts = df["Gesamt_strat_OCEAN"].value_counts() #Gibt eine Series zürck für alle Werte gezählt in counts
+counts = df["Gesamt_strat_OCEAN"].value_counts()
 
-richtige_kombinationen = counts[counts >= 2].index #Nimmt nur den Index, also z.B. 1-4-3-4-5 aus der Series counts
+richtige_kombinationen = counts[counts >= 2].index
 
 df = df[df["Gesamt_strat_OCEAN"].isin(richtige_kombinationen)]
 
-df = df.reset_index(drop=True) #Index neu berechnen, weil Punkte gelöscht wurden
+df = df.reset_index(drop=True)
 
-splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42) #Spliiter Objekt wird vorbereitet mit jeweils 10 Splits, Test-Grösse von 20% und dem random_state vom 42, damit immer gleiche Test/Trainingssets generiet werden.
-stratifiezierte_splits = [] #Liste für die Paare aus Test- und Trainingsdaten DataFrames
-for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]): #Splitter Objekt hat die Methode split(), um Verteilungen zu berücksichtigen
+splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+stratifiezierte_splits = []
+for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]):
     train_set_n = df.loc[trainings_indexe]
     temp_set = df.loc[test_indexe]
 
@@ -93,7 +84,7 @@ for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]
     temp_set, test_size=0.5, random_state=43
     )
 
-    stratifiezierte_splits.append([train_set_n, val_set, test_set]) #Liste bekommt 10 Paare von Training und Test und Validierung
+    stratifiezierte_splits.append([train_set_n, val_set, test_set])
 
 
 df1 = pd.read_csv(path2)
@@ -113,13 +104,9 @@ for i, splits in enumerate(stratifiezierte_splits):
     x_test = texte_pro_user.set_index("author").loc[test_split.index, "body"]
 
     y_cols = ["openness_cat", "conscientiousness_cat", "extraversion_cat", "agreeableness_cat", "neuroticism_cat"]
-    y_cols_reg = ["openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"]
     y_train = train_split.loc[:, y_cols]
     y_vald = vald_split.loc[:, y_cols]
     y_test = test_split.loc[:, y_cols]
-    y_train_reg = train_split.loc[:, y_cols_reg]
-    y_vald_reg = vald_split.loc[:, y_cols_reg]
-    y_test_reg = test_split.loc[:, y_cols_reg]
 
     split_data = {
         "x_train": x_train,
@@ -127,10 +114,7 @@ for i, splits in enumerate(stratifiezierte_splits):
         "x_test": x_test,
         "y_train": y_train,
         "y_vald": y_vald,
-        "y_test": y_test,
-        "y_train_reg": y_train_reg,
-        "y_vald_reg": y_vald_reg,
-        "y_test_reg": y_test_reg
+        "y_test": y_test
     }
 
     all_splits.append(split_data)
@@ -158,11 +142,6 @@ vocab_blocks = {
 
 full_vocab = vocab_blocks["O-Words"] + vocab_blocks["C-Words"] + vocab_blocks["E-Words"] + vocab_blocks["A-Words"] + vocab_blocks["N-Words"]
 
-print(len(vocab_blocks["O-Words"]))
-print(len(vocab_blocks["C-Words"]))
-print(len(vocab_blocks["E-Words"]))
-print(len(vocab_blocks["A-Words"]))
-print(len(vocab_blocks["N-Words"]))
 seen = set()
 unique_vocab = []
 
@@ -173,9 +152,6 @@ for word in full_vocab:
         unique_vocab.append(w)
 
 vocab_dict = {word: idx for idx, word in enumerate(unique_vocab)}
-
-print(unique_vocab)
-print(len(unique_vocab))
 
 from sklearn.feature_extraction.text import CountVectorizer
 
@@ -327,7 +303,7 @@ for epoch_index in range(args.num_epochs):
         optimizer.zero_grad()
 
         outputs = classifier(batch_dict['x_data'].float())
-        y = batch_dict['y_target'].long() #right dtype integer64
+        y = batch_dict['y_target'].long()
 
         loss_O = loss_O_func(outputs[0], y[:,0])
         loss_C = loss_C_func(outputs[1], y[:,1])
@@ -449,7 +425,7 @@ for i, (col, trait) in enumerate(zip(cols, traits)):
 
     epochen = range(1, len(loss_training) + 1)
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))  # full in fig, parts in axes
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
 
     fig.suptitle(trait, fontsize=20, fontweight="bold")
 

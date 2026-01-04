@@ -13,7 +13,7 @@ path1 = "../Files/oceanprofilesfile.csv"
 df = pd.read_csv(path1)
 
 for i, col in enumerate(df.columns[13:18]):
-    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=["niedrig", "mittel", "hoch"]) #Speichert ein Categorical-Object in jeweils einer neuen Spalte für alle OCEAN-Werte, Gibt hier dann 5 Bins, die die Werte für OCEAN unterteilen in die passenden Kateogrien
+    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=["niedrig", "mittel", "hoch"])
 cat_cols = [
     "openness_cat",
     "conscientiousness_cat",
@@ -27,22 +27,22 @@ df = df.dropna(subset=cat_cols)
 df["Gesamt_strat_OCEAN"] = (df["openness_cat"].astype(str) + "_" + df["conscientiousness_cat"].astype(str) + "_" + df["extraversion_cat"].astype(str) + "_" + df["agreeableness_cat"].astype(str) + "_" + df["neuroticism_cat"].astype(str))
 
 
-counts = df["Gesamt_strat_OCEAN"].value_counts() #Gibt eine Series zürck für alle Werte gezählt in counts
+counts = df["Gesamt_strat_OCEAN"].value_counts()
 
-richtige_kombinationen = counts[counts >= 2].index #Nimmt nur den Index, also z.B. 1-4-3-4-5 aus der Series counts
+richtige_kombinationen = counts[counts >= 2].index
 
 df = df[df["Gesamt_strat_OCEAN"].isin(richtige_kombinationen)]
 
-df = df.reset_index(drop=True) #Index neu berechnen, weil Punkte gelöscht wurden
+df = df.reset_index(drop=True)
 
 df = df.add_prefix("profile_")
 
-splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42) #Spliiter Objekt wird vorbereitet mit jeweils 10 Splits, Test-Grösse von 20% und dem random_state vom 42, damit immer gleiche Test/Trainingssets generiet werden.
-stratifiezierte_splits = [] #Liste für die Paare aus Test- und Trainingsdaten DataFrames
-for trainings_indexe, test_indexe in splitter.split(df, df["profile_Gesamt_strat_OCEAN"]): #Splitter Objekt hat die Methode split(), um Verteilungen zu berücksichtigen
+splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+stratifiezierte_splits = []
+for trainings_indexe, test_indexe in splitter.split(df, df["profile_Gesamt_strat_OCEAN"]):
     strat_train_set_n = df.loc[trainings_indexe]
     strat_test_set_n = df.loc[test_indexe]
-    stratifiezierte_splits.append([strat_train_set_n, strat_test_set_n]) #Liste bekommt 10 Paare von Training und Test
+    stratifiezierte_splits.append([strat_train_set_n, strat_test_set_n])
 
 path1 = "../Files/commentsfromoceanpeople.csv"
 
@@ -53,14 +53,10 @@ texte_pro_user = df2.groupby("author")["body"].apply(' '.join).reset_index()
 texte_pro_user.index = texte_pro_user["author"]
 texte_pro_user.drop(["author"], axis=1, inplace=True)
 
-profile_users = set(df["author"])  # from profiles
+profile_users = set(df["author"])
 text_users = set(texte_pro_user.index)
 
 missing_users = profile_users - text_users
-print("Users in OCEAN profiles but missing text:", len(missing_users))
-print(list(missing_users)[:20])
-
-print(texte_pro_user.columns)
 vectorizer_count = CountVectorizer()
 
 vectorizer_tfid = TfidfVectorizer(
@@ -89,18 +85,7 @@ dimensionen = ["profile_openness_cat", "profile_conscientiousness_cat", "profile
 modele = {}
 genauigkeiten = {}
 
-print(merged_trainings_daten.head())
-print(merged_test_daten.head())
-
 feature_cols = vectorizer_tfid.get_feature_names_out().tolist()
-
-print(len(feature_cols))
-print(len(merged_test_daten.columns))
-missing_features = [c for c in feature_cols if c not in merged_test_daten.columns]
-print(len(missing_features))
-print(missing_features[:20])
-print(feature_cols[:50])
-
 
 for dimension in dimensionen:
     y_train = merged_trainings_daten[dimension]

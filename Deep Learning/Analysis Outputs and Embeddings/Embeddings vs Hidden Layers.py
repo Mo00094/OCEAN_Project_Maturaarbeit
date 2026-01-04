@@ -281,7 +281,7 @@ table.auto_set_font_size(False)
 table.set_fontsize(10)
 
 for (reihe, col), zelle in table.get_celld().items():
-    if reihe == 0: #da es bei der kopfzeile anfängt
+    if reihe == 0:
         zelle.set_text_props(weight="bold")
         zelle.set_facecolor("white")
         continue

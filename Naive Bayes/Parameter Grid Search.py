@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, make_sco
 from sklearn.feature_extraction.text import TfidfVectorizer
 import joblib
 from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.model_selection import train_test_split #weil train_test_split nicht in der root von sklearn ist
+from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,7 +17,7 @@ path1 = "../Files/oceanprofilesfile.csv"
 df = pd.read_csv(path1)
 
 for i, col in enumerate(df.columns[13:18]):
-    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=["niedrig", "mittel", "hoch"]) #Speichert ein Categorical-Object in jeweils einer neuen Spalte für alle OCEAN-Werte, Gibt hier dann 5 Bins, die die Werte für OCEAN unterteilen in die passenden Kateogrien
+    df[str(col) + "_cat"] = pd.cut(df[col], bins=[0, 33, 66, np.inf], labels=["niedrig", "mittel", "hoch"])
 cat_cols = [
     "openness_cat",
     "conscientiousness_cat",
@@ -28,29 +28,24 @@ cat_cols = [
 
 df = df.dropna(subset=cat_cols)
 
-print(df.columns)
-print(df.head())
-
 df["Gesamt_strat_OCEAN"] = (df["openness_cat"].astype(str) + "_" + df["conscientiousness_cat"].astype(str) + "_" + df["extraversion_cat"].astype(str) + "_" + df["agreeableness_cat"].astype(str) + "_" + df["neuroticism_cat"].astype(str))
 
 
-counts = df["Gesamt_strat_OCEAN"].value_counts() #Gibt eine Series zürck für alle Werte gezählt in counts
+counts = df["Gesamt_strat_OCEAN"].value_counts()
 
-richtige_kombinationen = counts[counts >= 2].index #Nimmt nur den Index, also z.B. 1-4-3-4-5 aus der Series counts
+richtige_kombinationen = counts[counts >= 2].index
 
 df = df[df["Gesamt_strat_OCEAN"].isin(richtige_kombinationen)]
 
-df = df.reset_index(drop=True) #Index neu berechnen, weil Punkte gelöscht wurden
+df = df.reset_index(drop=True)
 
-splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42) #Spliiter Objekt wird vorbereitet mit jeweils 10 Splits, Test-Grösse von 20% und dem random_state vom 42, damit immer gleiche Test/Trainingssets generiet werden.
-stratifiezierte_splits = [] #Liste für die Paare aus Test- und Trainingsdaten DataFrames
-for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]): #Splitter Objekt hat die Methode split(), um Verteilungen zu berücksichtigen
+splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+stratifiezierte_splits = []
+for trainings_indexe, test_indexe in splitter.split(df, df["Gesamt_strat_OCEAN"]):
     strat_train_set_n = df.loc[trainings_indexe]
     strat_test_set_n = df.loc[test_indexe]
-    stratifiezierte_splits.append([strat_train_set_n, strat_test_set_n]) #Liste bekommt 10 Paare von Training und Test
+    stratifiezierte_splits.append([strat_train_set_n, strat_test_set_n])
 
-print(df["Gesamt_strat_OCEAN"].value_counts())
-print(df.head())
 
 path2 = "../Files/commentsfromoceanpeople.csv"
 

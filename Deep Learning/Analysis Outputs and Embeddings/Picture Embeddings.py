@@ -47,8 +47,8 @@ print("Geladene Kommentare:", len(comments))
 
 tqdm.pandas()
 
-def collect_texts(group, menge=900):
-    texts = group["body"].sample(min(n=menge)).tolist()
+def collect_texts(group, menge=10):
+    texts = group["body"].sample(n=min(len(group), menge), random_state=42).tolist()
     return " ".join(texts)
 
 user_texts = comments.groupby("author").progress_apply(collect_texts)
